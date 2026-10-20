@@ -659,10 +659,10 @@ html[data-theme="dark"] .theme-switch-thumb {
   white-space: nowrap;
 }
 
-/* 2. Kartu Rincian Kontribusi */
+/* 2. Kartu Rincian Kontribusi (Tersusun Menurun) */
 .contributors-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: var(--space-sm);
 }
 
@@ -689,6 +689,14 @@ html[data-theme="dark"] .theme-switch-thumb {
 
 .member-card:hover {
   box-shadow: var(--shadow-sm);
+}
+
+.member-card.m1:hover {
+  border-color: var(--m1-primary);
+}
+
+.member-card.m2:hover {
+  border-color: var(--m2-primary);
 }
 
 .member-header {
@@ -951,6 +959,13 @@ html[data-theme="dark"] .theme-switch-thumb {
 .form-row-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+/* Baris formulir yang selalu menurun (satu kolom) */
+.form-row-stack {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: var(--space-sm);
 }
 
@@ -1544,7 +1559,7 @@ html[data-theme="dark"] .theme-switch-thumb {
             </div>
           </div>
 
-          <div class="form-group form-row-2">
+          <div class="form-group form-row-stack">
             <div>
               <label class="form-label" for="txDateInput">Tanggal</label>
               <input type="date" id="txDateInput" class="form-input" required />
