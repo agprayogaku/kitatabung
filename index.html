@@ -154,6 +154,8 @@ html[data-theme="dark"] {
 
 html {
   font-size: 14px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -916,7 +918,9 @@ html[data-theme="dark"] .theme-switch-thumb {
 }
 
 /* Cegah input tanggal bawaan browser melebar keluar layar */
-input[type="date"].form-input {
+input[type="date"].form-input,
+input[type="time"].form-input,
+input[type="datetime-local"].form-input {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -926,6 +930,30 @@ input[type="date"].form-input {
 
 input[type="date"].form-input::-webkit-date-and-time-value {
   text-align: left;
+  min-width: 0;
+}
+
+/* Safari/iOS: input temporal mengabaikan width:100% tanpa appearance:none */
+@supports (-webkit-touch-callout: none) {
+  input[type="date"].form-input,
+  input[type="time"].form-input,
+  input[type="datetime-local"].form-input {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Cegah iOS auto-zoom saat input difokuskan (font minimal 16px) */
+@media (max-width: 767px) {
+  .form-input,
+  input.form-input,
+  select.form-input {
+    font-size: 16px;
+  }
 }
 
 .form-input.with-prefix {
@@ -980,7 +1008,7 @@ input[type="date"].form-input::-webkit-date-and-time-value {
 /* Baris formulir yang selalu menurun (satu kolom) */
 .form-row-stack {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-sm);
 }
 
