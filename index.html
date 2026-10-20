@@ -903,6 +903,8 @@ html[data-theme="dark"] .theme-switch-thumb {
 
 .form-input {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: 10px 12px;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
@@ -911,6 +913,19 @@ html[data-theme="dark"] .theme-switch-thumb {
   color: var(--text-primary);
   background: var(--bg-surface);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Cegah input tanggal bawaan browser melebar keluar layar */
+input[type="date"].form-input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+input[type="date"].form-input::-webkit-date-and-time-value {
+  text-align: left;
 }
 
 .form-input.with-prefix {
@@ -967,6 +982,12 @@ html[data-theme="dark"] .theme-switch-thumb {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-sm);
+}
+
+/* Item grid tidak boleh melebar melebihi kolomnya */
+.form-row-stack > div,
+.form-row-2 > div {
+  min-width: 0;
 }
 
 .submit-btn {
