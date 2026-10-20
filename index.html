@@ -1,0 +1,3308 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>KitaTabung — Catatan Tabungan Bersama Pasangan</title>
+  <meta name="description" content="Aplikasi web catatan tabungan bersama untuk pasangan terintegrasi Google Spreadsheet & LocalStorage. Desain mobile-first, elegan, dan aman untuk publik." />
+  <meta name="theme-color" content="#0D9488" id="metaThemeColor" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+/* ==========================================================================
+   KitaTabung — Stylesheet Utama (Mobile-First Modern UI)
+   Arsitektur Desain: Clean Fintech Minimalist, Tema Terang Default
+   ========================================================================== */
+
+:root {
+  /* Palet Tema Terang (Light Mode - Default) */
+  --bg-primary: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F1F5F9;
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --border-color: #E2E8F0;
+  --border-hover: #CBD5E1;
+  --divider-line: rgba(226, 232, 240, 0.8);
+  --subtle-line: rgba(15, 23, 42, 0.06);
+  --mini-track-bg: rgba(15, 23, 42, 0.08);
+
+  /* Kartu Hero & Banner */
+  --hero-bg: linear-gradient(170deg, #FFFFFF 0%, #F0FDFA 100%);
+  --hero-border: #CCFBF1;
+  --banner-text: #0F766E;
+  --banner-zero-bg: #FFFBEB;
+  --banner-zero-border: #FDE68A;
+  --banner-zero-text: #B45309;
+
+  /* Brand Aksen (Teal Emerald) */
+  --accent-primary: #0D9488;
+  --accent-hover: #0F766E;
+  --accent-light: #CCFBF1;
+  --accent-soft: #F0FDFA;
+
+  /* Kontributor 1 (Partner 1 - Royal Indigo) */
+  --m1-primary: #4F46E5;
+  --m1-hover: #4338CA;
+  --m1-light: #EEF2FF;
+  --m1-border: #C7D2FE;
+  --m1-card-bg: linear-gradient(180deg, #FFFFFF 0%, #EEF2FF 170%);
+
+  /* Kontributor 2 (Partner 2 - Warm Rose) */
+  --m2-primary: #E11D48;
+  --m2-hover: #BE123C;
+  --m2-light: #FFF1F2;
+  --m2-border: #FECDD3;
+  --m2-card-bg: linear-gradient(180deg, #FFFFFF 0%, #FFF1F2 170%);
+
+  /* Status Transaksi */
+  --danger-primary: #E11D48;
+  --danger-light: #FFF1F2;
+  --warning-primary: #D97706;
+  --warning-light: #FFFBEB;
+
+  /* Spasi & Proporsi Simetris */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 20px;
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 14px -2px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 12px 28px -4px rgba(15, 23, 42, 0.12);
+
+  /* Tipografi */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, Menlo, monospace;
+
+  --fs-title-lg: 22px;
+  --fs-title-md: 17px;
+  --fs-heading: 15px;
+  --fs-body-lg: 14px;
+  --fs-body: 13px;
+  --fs-compact: 12px;
+
+  --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Palet Mode Gelap (Dark Mode Opsional) */
+html[data-theme="dark"] {
+  --bg-primary: #090D16;
+  --bg-surface: #111827;
+  --bg-subtle: #1F2937;
+  --header-bg: rgba(9, 13, 22, 0.90);
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --border-color: #1F2937;
+  --border-hover: #374151;
+  --divider-line: rgba(31, 41, 55, 0.85);
+  --subtle-line: rgba(255, 255, 255, 0.08);
+  --mini-track-bg: rgba(255, 255, 255, 0.12);
+
+  --hero-bg: linear-gradient(170deg, #111827 0%, #062823 100%);
+  --hero-border: #134E48;
+  --banner-text: #5EEAD4;
+  --banner-zero-bg: rgba(217, 119, 6, 0.12);
+  --banner-zero-border: rgba(245, 158, 11, 0.35);
+  --banner-zero-text: #FCD34D;
+
+  --accent-primary: #14B8A6;
+  --accent-hover: #0D9488;
+  --accent-light: rgba(20, 184, 166, 0.25);
+  --accent-soft: rgba(20, 184, 166, 0.12);
+
+  --m1-primary: #818CF8;
+  --m1-hover: #6366F1;
+  --m1-light: rgba(99, 102, 241, 0.18);
+  --m1-border: rgba(129, 140, 248, 0.35);
+  --m1-card-bg: linear-gradient(180deg, #111827 0%, rgba(79, 70, 229, 0.15) 170%);
+
+  --m2-primary: #FB7185;
+  --m2-hover: #F43F5E;
+  --m2-light: rgba(244, 63, 94, 0.18);
+  --m2-border: rgba(251, 113, 133, 0.35);
+  --m2-card-bg: linear-gradient(180deg, #111827 0%, rgba(225, 29, 72, 0.15) 170%);
+
+  --danger-primary: #FB7185;
+  --danger-light: rgba(244, 63, 94, 0.18);
+  --warning-primary: #FBBF24;
+  --warning-light: rgba(245, 158, 11, 0.15);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 18px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 36px -4px rgba(0, 0, 0, 0.7);
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: 40px;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  background-image:
+    radial-gradient(circle at 10% 0%, rgba(13, 148, 136, 0.04), transparent 45%),
+    radial-gradient(circle at 90% 10%, rgba(79, 70, 229, 0.04), transparent 45%);
+  background-attachment: fixed;
+}
+
+/* Ikon SVG Segaris */
+.svg-icon {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.svg-icon-sm {
+  width: 13px;
+  height: 13px;
+}
+
+/* Tipografi Monospace Khusus Angka & Saldo */
+.num-mono,
+.total-balance,
+.member-amount,
+.member-share-badge,
+.tx-amount,
+.currency-prefix,
+.form-input.with-prefix {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Header & Navigasi Atas */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--header-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 11px var(--space-md);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.header-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.brand-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--accent-primary), #14B8A6);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--fs-body-lg);
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);
+}
+
+.brand-title {
+  font-size: var(--fs-title-md);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Sakelar Mode Gelap / Terang */
+.theme-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--fs-compact);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-switch-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+  background: var(--bg-subtle);
+}
+
+.theme-switch-track {
+  width: 28px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 1px;
+}
+
+html[data-theme="dark"] .theme-switch-track {
+  background: var(--accent-soft);
+  border-color: var(--accent-primary);
+}
+
+.theme-switch-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  transform: translateX(0);
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+html[data-theme="dark"] .theme-switch-thumb {
+  background: var(--accent-primary);
+  transform: translateX(12px);
+}
+
+.sync-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-compact);
+  font-weight: 600;
+  background: var(--accent-soft);
+  color: var(--accent-primary);
+  border: 1px solid var(--accent-light);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.sync-badge:hover {
+  background: var(--accent-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.sync-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.sync-dot.offline {
+  background-color: var(--warning-primary);
+  box-shadow: 0 0 0 3px var(--warning-light);
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.icon-btn:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-subtle);
+}
+
+.icon-btn:active {
+  transform: translateY(1px);
+}
+
+/* Tata Letak Kontainer Utama (Mobile-First) */
+.main-container {
+  max-width: 1040px;
+  margin: var(--space-md) auto 0;
+  padding: 0 var(--space-md);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+.left-column,
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+/* Kartu Elemen */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+/* 1. Kartu Hero Target & Saldo */
+.hero-card {
+  background: var(--hero-bg);
+  border: 1px solid var(--hero-border);
+  box-shadow: var(--shadow-md);
+}
+
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+
+.goal-title {
+  font-size: var(--fs-title-md);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.edit-goal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 5px 10px;
+  font-size: var(--fs-compact);
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.edit-goal-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  background: var(--bg-subtle);
+}
+
+.balance-block {
+  padding: var(--space-sm) 0;
+  margin-bottom: var(--space-sm);
+  border-top: 1px solid var(--divider-line);
+  border-bottom: 1px solid var(--divider-line);
+}
+
+.balance-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.balance-label {
+  font-size: var(--fs-body);
+  color: var(--text-secondary);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.hide-balance-inline-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--fs-compact);
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.hide-balance-inline-btn:hover {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.hide-balance-inline-btn.active-toggle {
+  background: var(--text-primary);
+  color: var(--bg-surface);
+  border-color: var(--text-primary);
+}
+
+.total-balance {
+  font-size: var(--fs-title-lg);
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.target-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--fs-body);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xs);
+  gap: var(--space-xs);
+}
+
+.target-summary-row strong {
+  color: var(--text-primary);
+}
+
+/* Stacked Progress Bar */
+.progress-track {
+  width: 100%;
+  height: 12px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  display: flex;
+  border: 1px solid var(--border-color);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.progress-segment-m1 {
+  height: 100%;
+  background: linear-gradient(90deg, var(--m1-primary), #6366F1);
+  transition: width 0.35s ease;
+}
+
+.progress-segment-m2 {
+  height: 100%;
+  background: linear-gradient(90deg, #F43F5E, var(--m2-primary));
+  transition: width 0.35s ease;
+}
+
+.progress-legend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-xs);
+  font-size: var(--fs-compact);
+  color: var(--text-secondary);
+}
+
+.legend-items {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.legend-dot.m1 {
+  background: var(--m1-primary);
+}
+
+.legend-dot.m2 {
+  background: var(--m2-primary);
+}
+
+/* Metrik Card Grid (Mobile-friendly) */
+.hero-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  margin-top: var(--space-sm);
+  width: 100%;
+}
+
+.metric-box {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.metric-box:hover {
+  border-color: var(--border-hover);
+}
+
+.metric-label {
+  font-size: var(--fs-compact);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.metric-val {
+  font-size: var(--fs-body);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.recommendation-banner {
+  margin-top: var(--space-sm);
+  padding: 10px 13px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-light);
+  color: var(--banner-text);
+  font-size: var(--fs-body);
+  line-height: 1.45;
+  box-shadow: var(--shadow-sm);
+}
+
+.recommendation-banner.zero-target {
+  background: var(--banner-zero-bg);
+  border-color: var(--banner-zero-border);
+  color: var(--banner-zero-text);
+}
+
+/* Judul Bagian */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+
+.section-title {
+  font-size: var(--fs-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.rule-pill {
+  font-size: var(--fs-compact);
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* 2. Kartu Rincian Kontribusi */
+.contributors-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+
+.member-card {
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  transition: all var(--transition-fast);
+}
+
+.member-card.m1 {
+  background: var(--m1-card-bg);
+  border-color: var(--m1-border);
+}
+
+.member-card.m2 {
+  background: var(--m2-card-bg);
+  border-color: var(--m2-border);
+}
+
+.member-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.member-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: var(--space-xs);
+}
+
+.member-identity {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.member-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--fs-compact);
+  color: #FFFFFF;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.member-avatar.m1 {
+  background: var(--m1-primary);
+}
+
+.member-avatar.m2 {
+  background: var(--m2-primary);
+}
+
+.member-name {
+  font-weight: 700;
+  font-size: var(--fs-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member-share-badge {
+  font-size: var(--fs-compact);
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.member-card.m1 .member-share-badge {
+  background: var(--m1-light);
+  color: var(--m1-primary);
+}
+
+.member-card.m2 .member-share-badge {
+  background: var(--m2-light);
+  color: var(--m2-primary);
+}
+
+.member-amount {
+  font-size: var(--fs-body-lg);
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.member-subtext {
+  font-size: var(--fs-compact);
+  color: var(--text-secondary);
+}
+
+.member-rule-progress {
+  margin-top: var(--space-xs);
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--subtle-line);
+}
+
+.mini-bar-track {
+  width: 100%;
+  height: 5px;
+  background: var(--mini-track-bg);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.mini-bar-fill.m1 {
+  height: 100%;
+  background: var(--m1-primary);
+}
+
+.mini-bar-fill.m2 {
+  height: 100%;
+  background: var(--m2-primary);
+}
+
+/* 3. Formulir Transaksi */
+.tx-type-switcher {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+  background: var(--bg-subtle);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.tx-type-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  padding: 9px 12px;
+  border-radius: 7px;
+  font-size: var(--fs-body);
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tx-type-btn.active.deposit {
+  background: var(--accent-primary);
+  color: #FFFFFF;
+  box-shadow: var(--shadow-sm);
+}
+
+.tx-type-btn.active.withdrawal {
+  background: var(--danger-primary);
+  color: #FFFFFF;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-group {
+  margin-bottom: var(--space-sm);
+}
+
+.form-label {
+  display: block;
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.member-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.member-radio-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: var(--fs-body);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: var(--bg-surface);
+}
+
+.member-radio-label input {
+  display: none;
+}
+
+.member-radio-label.selected-m1 {
+  border-color: var(--m1-primary);
+  background: var(--m1-light);
+  color: var(--m1-primary);
+}
+
+.member-radio-label.selected-m2 {
+  border-color: var(--m2-primary);
+  background: var(--m2-light);
+  color: var(--m2-primary);
+}
+
+.currency-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-prefix {
+  position: absolute;
+  left: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-size: var(--fs-body-lg);
+  pointer-events: none;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-body);
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-input.with-prefix {
+  padding-left: 42px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+/* Quick Chips (Mobile-friendly Grid) */
+.quick-chips {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: var(--space-xs);
+}
+
+.chip-btn {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 4px;
+  font-size: var(--fs-compact);
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+
+.chip-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent-primary);
+  border-color: var(--accent-light);
+}
+
+.chip-btn:active {
+  transform: scale(0.96);
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--accent-primary);
+  color: #FFFFFF;
+  font-size: var(--fs-body-lg);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  margin-top: 4px;
+}
+
+.submit-btn:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.submit-btn:active {
+  transform: translateY(1px);
+}
+
+.submit-btn.withdrawal-mode {
+  background: var(--danger-primary);
+}
+
+.submit-btn.withdrawal-mode:hover {
+  background: var(--danger-primary);
+}
+
+/* 4. Riwayat & Filter */
+.filter-bar {
+  display: flex;
+  margin-bottom: var(--space-sm);
+}
+
+.filter-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  gap: 4px;
+  background: var(--bg-subtle);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.filter-tab {
+  border: none;
+  background: transparent;
+  padding: 7px 10px;
+  border-radius: 7px;
+  font-size: var(--fs-compact);
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.filter-tab.active {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.tx-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.tx-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  gap: var(--space-sm);
+  transition: all var(--transition-fast);
+}
+
+.tx-item:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border-hover);
+}
+
+.tx-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.tx-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--fs-body);
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.tx-badge.m1 {
+  background: var(--m1-light);
+  color: var(--m1-primary);
+}
+
+.tx-badge.m2 {
+  background: var(--m2-light);
+  color: var(--m2-primary);
+}
+
+.tx-info {
+  min-width: 0;
+}
+
+.tx-title {
+  font-size: var(--fs-body);
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tx-meta {
+  font-size: var(--fs-compact);
+  color: var(--text-muted);
+}
+
+.tx-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.tx-amount {
+  font-size: var(--fs-body-lg);
+  font-weight: 700;
+  text-align: right;
+}
+
+.tx-amount.deposit {
+  color: var(--accent-primary);
+}
+
+.tx-amount.withdrawal {
+  color: var(--danger-primary);
+}
+
+.delete-tx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+}
+
+.delete-tx-btn:hover {
+  background: var(--danger-light);
+  color: var(--danger-primary);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 28px 16px;
+  color: var(--text-muted);
+  font-size: var(--fs-body);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+}
+
+/* Modal Dialog (Mobile Bottom-Sheet on small screens) */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  max-width: 480px;
+  width: 100%;
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modal-enter 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.modal-title {
+  font-size: var(--fs-title-md);
+  font-weight: 800;
+}
+
+.close-modal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: var(--fs-body);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.close-modal-btn:hover {
+  background: var(--danger-light);
+  color: var(--danger-primary);
+}
+
+.modal-section-divider {
+  margin: 14px 0 10px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-color);
+  font-size: var(--fs-compact);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.toast-notification {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--text-primary);
+  color: var(--bg-surface);
+  padding: 9px 16px;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  z-index: 60;
+  box-shadow: var(--shadow-md);
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Responsif Desktop (>= 768px) */
+@media (min-width: 768px) {
+  :root {
+    --fs-title-lg: 24px;
+    --fs-title-md: 18px;
+    --fs-heading: 16px;
+    --fs-body-lg: 15px;
+    --fs-body: 14px;
+    --fs-compact: 13px;
+  }
+
+  .main-container {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+  }
+
+  .left-column,
+  .right-column {
+    gap: var(--space-lg);
+  }
+
+  .card {
+    padding: var(--space-lg);
+  }
+
+  .hero-metrics-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xs);
+  }
+
+  .metric-box {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 12px;
+    gap: 4px;
+  }
+
+  .metric-val {
+    text-align: left;
+  }
+}
+
+/* Responsif Layar Kecil Handphone (<= 420px) */
+@media (max-width: 420px) {
+  .app-header {
+    padding: 8px 12px;
+  }
+  .main-container {
+    padding: 0 12px;
+  }
+  .card {
+    padding: 14px 12px;
+  }
+  .quick-chips {
+    gap: 4px;
+  }
+  .chip-btn {
+    padding: 5px 2px;
+    font-size: 11px;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <!-- Header Atas Aplikasi -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-group">
+        <div class="brand-logo" id="brandLogoDisplay" aria-hidden="true">KT</div>
+        <h1 class="brand-title" id="brandTitleDisplay">KitaTabung</h1>
+      </div>
+
+      <div class="header-actions">
+        <!-- Sakelar Mode Terang / Gelap (Default Terang) -->
+        <button type="button" class="theme-switch-btn" id="themeToggleBtn" role="switch" aria-checked="false" aria-label="Alihkan mode tema" title="Beralih Mode Terang / Gelap">
+          <span class="theme-switch-track" aria-hidden="true">
+            <span class="theme-switch-thumb"></span>
+          </span>
+          <span id="themeIconContainer" aria-hidden="true">
+            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+            </svg>
+          </span>
+        </button>
+
+        <!-- Badge Status Sinkronisasi Google Spreadsheet -->
+        <button type="button" class="sync-badge" id="openSyncModalBtn" title="Pengaturan Database Google Spreadsheet & Cache">
+          <span class="sync-dot" id="syncStatusDot"></span>
+          <span id="syncStatusText">Cache Lokal</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Konten Utama -->
+  <main class="main-container">
+
+    <!-- Kolom Kiri: Target, Saldo, Rincian, dan Formulir -->
+    <div class="left-column">
+
+      <!-- 1. Kartu Hero Progres Tabungan -->
+      <section class="card hero-card" aria-labelledby="goalTitleDisplay">
+        <div class="hero-top">
+          <h2 class="goal-title" id="goalTitleDisplay">Target Tabungan Bersama</h2>
+          <button type="button" class="edit-goal-btn" id="openGoalModalBtn">
+            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <span>Atur Target</span>
+          </button>
+        </div>
+
+        <div class="balance-block">
+          <div class="balance-label-row">
+            <span class="balance-label">Total Saldo Terkumpul</span>
+            <button type="button" class="hide-balance-inline-btn" id="toggleHideBalanceBtn" aria-label="Sembunyikan atau tampilkan saldo">
+              <span id="hideBalanceIconContainer" aria-hidden="true">
+                <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </span>
+              <span id="hideBalanceBtnLabel">Sembunyikan</span>
+            </button>
+          </div>
+          <div class="total-balance" id="totalBalanceDisplay">Rp 0</div>
+        </div>
+
+        <div class="target-summary-row">
+          <span>Target: <strong class="num-mono" id="targetAmountDisplay">Rp 0</strong></span>
+          <strong id="overallProgressPctDisplay">Target Fleksibel</strong>
+        </div>
+
+        <!-- Stacked Dual-Color Progress Bar -->
+        <div class="progress-track" role="progressbar" aria-label="Kemajuan Tabungan">
+          <div class="progress-segment-m1" id="progressBarM1" style="width: 0%"></div>
+          <div class="progress-segment-m2" id="progressBarM2" style="width: 0%"></div>
+        </div>
+
+        <div class="progress-legend">
+          <div class="legend-items">
+            <span><i class="legend-dot m1"></i><span id="legendNameM1">Partner 1</span></span>
+            <span><i class="legend-dot m2"></i><span id="legendNameM2">Partner 2</span></span>
+          </div>
+          <span>Progres Gabungan</span>
+        </div>
+
+        <!-- Metrik 3 Kolom Responsif Mobile -->
+        <div class="hero-metrics-grid">
+          <div class="metric-box">
+            <div class="metric-label">Sisa Target</div>
+            <div class="metric-val" id="remainingAmountDisplay"><span class="num-mono">Rp 0</span></div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Tenggat Waktu</div>
+            <div class="metric-val" id="deadlineDisplay">-</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Rekomendasi / Bln</div>
+            <div class="metric-val" id="monthlyRecDisplay">Sesuai selera</div>
+          </div>
+        </div>
+
+        <!-- Banner Informasi Target -->
+        <div class="recommendation-banner zero-target" id="recommendationBanner">
+          <div id="recommendationBannerText">
+            Target tabungan belum ditetapkan. Ketuk tombol <strong>Atur Target</strong> untuk menetapkan sasaran nominal bersama.
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Rincian Kontribusi Kedua Subjek -->
+      <section class="card" aria-label="Rincian Kontribusi">
+        <div class="section-header">
+          <h3 class="section-title">Rincian Kontribusi</h3>
+          <span class="rule-pill" id="contributionRulePill">Porsi Fleksibel</span>
+        </div>
+
+        <div class="contributors-grid">
+          <!-- Kontributor 1 -->
+          <div class="member-card m1">
+            <div class="member-header">
+              <div class="member-identity">
+                <div class="member-avatar m1" id="memberAvatarM1">1</div>
+                <span class="member-name" id="memberNameM1">Partner 1</span>
+              </div>
+              <span class="member-share-badge" id="m1ShareBadge">0.0%</span>
+            </div>
+            <div class="member-amount" id="m1AmountDisplay">Rp 0</div>
+            <div class="member-subtext">Saldo bersih</div>
+
+            <div class="member-rule-progress" id="m1RuleProgressBox" style="display: none;">
+              <div class="member-subtext" id="m1TargetSubtext">Target: <span class="num-mono">Rp 0</span></div>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill m1" id="m1MiniBar" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kontributor 2 -->
+          <div class="member-card m2">
+            <div class="member-header">
+              <div class="member-identity">
+                <div class="member-avatar m2" id="memberAvatarM2">2</div>
+                <span class="member-name" id="memberNameM2">Partner 2</span>
+              </div>
+              <span class="member-share-badge" id="m2ShareBadge">0.0%</span>
+            </div>
+            <div class="member-amount" id="m2AmountDisplay">Rp 0</div>
+            <div class="member-subtext">Saldo bersih</div>
+
+            <div class="member-rule-progress" id="m2RuleProgressBox" style="display: none;">
+              <div class="member-subtext" id="m2TargetSubtext">Target: <span class="num-mono">Rp 0</span></div>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill m2" id="m2MiniBar" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Formulir Setor & Tarik Saldo -->
+      <section class="card" id="formSectionCard" aria-label="Formulir Catat Transaksi">
+        <div class="section-header">
+          <h3 class="section-title">Catat Transaksi</h3>
+          <span class="rule-pill">Setor &amp; Tarik</span>
+        </div>
+
+        <div class="tx-type-switcher" role="tablist">
+          <button type="button" class="tx-type-btn active deposit" data-tx-type="deposit">
+            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            <span>Setor Tabungan</span>
+          </button>
+          <button type="button" class="tx-type-btn withdrawal" data-tx-type="withdrawal">
+            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14"></path>
+            </svg>
+            <span>Tarik Saldo</span>
+          </button>
+        </div>
+
+        <form id="transactionForm" autocomplete="off">
+          <div class="form-group">
+            <label class="form-label">Pilih Kontributor</label>
+            <div class="member-selector">
+              <label class="member-radio-label selected-m1" id="memberLabelM1">
+                <input type="radio" name="txMember" value="member1" checked />
+                <span id="radioNameM1">Partner 1</span>
+              </label>
+              <label class="member-radio-label" id="memberLabelM2">
+                <input type="radio" name="txMember" value="member2" />
+                <span id="radioNameM2">Partner 2</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="txAmountInput">Nominal Transaksi</label>
+            <div class="currency-input-wrapper">
+              <span class="currency-prefix">Rp</span>
+              <input
+                type="text"
+                id="txAmountInput"
+                class="form-input with-prefix"
+                inputmode="numeric"
+                placeholder="0"
+                required
+              />
+            </div>
+            <div class="quick-chips" id="quickChipsContainer">
+              <button type="button" class="chip-btn" data-quick-amount="100000"><span class="num-mono">+100</span>rb</button>
+              <button type="button" class="chip-btn" data-quick-amount="250000"><span class="num-mono">+250</span>rb</button>
+              <button type="button" class="chip-btn" data-quick-amount="500000"><span class="num-mono">+500</span>rb</button>
+              <button type="button" class="chip-btn" data-quick-amount="1000000"><span class="num-mono">+1</span>jt</button>
+              <button type="button" class="chip-btn" data-quick-amount="2500000"><span class="num-mono">+2,5</span>jt</button>
+            </div>
+          </div>
+
+          <div class="form-group form-row-2">
+            <div>
+              <label class="form-label" for="txDateInput">Tanggal</label>
+              <input type="date" id="txDateInput" class="form-input" required />
+            </div>
+            <div>
+              <label class="form-label" for="txNoteInput">Catatan / Keperluan</label>
+              <input
+                type="text"
+                id="txNoteInput"
+                class="form-input"
+                placeholder="Misal: Tabungan rutin"
+                maxlength="60"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitTxBtn">
+            Simpan Setoran (+)
+          </button>
+        </form>
+      </section>
+
+    </div>
+
+    <!-- Kolom Kanan: Riwayat Transaksi -->
+    <div class="right-column">
+      <section class="card" aria-label="Riwayat Keluar Masuk">
+        <div class="section-header">
+          <h3 class="section-title">Riwayat Transaksi</h3>
+          <span class="rule-pill" id="txCountLabel"><span class="num-mono">0</span> catatan</span>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-tabs" role="tablist">
+            <button type="button" class="filter-tab active" data-filter-member="all">Semua</button>
+            <button type="button" class="filter-tab" data-filter-member="member1" id="filterTabM1">Partner 1</button>
+            <button type="button" class="filter-tab" data-filter-member="member2" id="filterTabM2">Partner 2</button>
+          </div>
+        </div>
+
+        <div class="tx-list" id="txListContainer"></div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- Modal 1: Pengaturan Target & Konfigurasi -->
+  <div class="modal-backdrop" id="goalModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="goalModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="goalModalTitle">Pengaturan Target &amp; Profil</h3>
+        <button type="button" class="close-modal-btn" id="closeGoalModalBtn" aria-label="Tutup">
+          <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6 6 18M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <form id="goalSettingsForm">
+        <div class="form-group">
+          <label class="form-label" for="goalTitleInput">Nama Target Tabungan</label>
+          <input
+            type="text"
+            id="goalTitleInput"
+            class="form-input"
+            placeholder="Target Tabungan Bersama"
+            required
+          />
+        </div>
+
+        <div class="form-group form-row-2">
+          <div>
+            <label class="form-label" for="member1NameInput">Nama Kontributor 1</label>
+            <input
+              type="text"
+              id="member1NameInput"
+              class="form-input"
+              placeholder="Partner 1"
+              maxlength="24"
+              required
+            />
+          </div>
+          <div>
+            <label class="form-label" for="member2NameInput">Nama Kontributor 2</label>
+            <input
+              type="text"
+              id="member2NameInput"
+              class="form-input"
+              placeholder="Partner 2"
+              maxlength="24"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="goalTargetAmountInput">Target Nominal (Isi 0 jika fleksibel)</label>
+          <div class="currency-input-wrapper">
+            <span class="currency-prefix">Rp</span>
+            <input
+              type="text"
+              id="goalTargetAmountInput"
+              class="form-input with-prefix"
+              inputmode="numeric"
+              placeholder="0"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="goalTargetDateInput">Tenggat Waktu Sasaran</label>
+          <input type="date" id="goalTargetDateInput" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="goalSplitModeSelect">Aturan Porsi Kontribusi</label>
+          <select id="goalSplitModeSelect" class="form-input">
+            <option value="flexible">Porsi Fleksibel (Tanpa Beban Target)</option>
+            <option value="custom">Tentukan Rasio Target Porsi</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="customRatioContainer" style="display: none;">
+          <label class="form-label" for="goalSplitRatioSlider">
+            Rasio Target: <strong id="ratioPreviewLabel">Partner 1 <span class="num-mono">50%</span> : Partner 2 <span class="num-mono">50%</span></strong>
+          </label>
+          <input
+            type="range"
+            id="goalSplitRatioSlider"
+            min="0"
+            max="100"
+            step="5"
+            value="50"
+            style="width: 100%; accent-color: var(--m1-primary);"
+          />
+        </div>
+
+        <div class="modal-section-divider">Pengaturan Tampilan Aplikasi</div>
+
+        <div class="form-group form-row-2">
+          <div>
+            <label class="form-label" for="appBrandTitleInput">Judul Aplikasi</label>
+            <input
+              type="text"
+              id="appBrandTitleInput"
+              class="form-input"
+              placeholder="KitaTabung"
+              maxlength="24"
+            />
+          </div>
+          <div>
+            <label class="form-label" for="appBrandInitialsInput">Inisial Logo</label>
+            <input
+              type="text"
+              id="appBrandInitialsInput"
+              class="form-input"
+              placeholder="KT"
+              maxlength="3"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="quickAmountsInput">Pintasan Cepat Tombol Setor (5 angka pisah koma)</label>
+          <input
+            type="text"
+            id="quickAmountsInput"
+            class="form-input num-mono"
+            placeholder="100000, 250000, 500000, 1000000, 2500000"
+          />
+        </div>
+
+        <button type="submit" class="submit-btn">Simpan Perubahan</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Sinkronisasi Google Spreadsheet -->
+  <div class="modal-backdrop" id="syncModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="syncModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="syncModalTitle">Database Google Spreadsheet</h3>
+        <button type="button" class="close-modal-btn" id="closeSyncModalBtn" aria-label="Tutup">
+          <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6 6 18M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <p style="font-size: var(--fs-body); color: var(--text-secondary); margin-bottom: 14px;">
+        Hubungkan Google Spreadsheet melalui <strong>Google Apps Script Web App</strong> (URL berakhiran <code class="num-mono">/exec</code>). Seluruh data transaksi, nama subjek, dan target tersimpan aman di cloud Spreadsheet pribadi Anda.
+      </p>
+
+      <form id="syncConfigForm">
+        <div class="form-group">
+          <label class="form-label" for="syncRoomIdInput">Kode Ruang / ID Tabungan</label>
+          <input
+            type="text"
+            id="syncRoomIdInput"
+            class="form-input"
+            placeholder="tabungan-bersama"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="syncApiUrlInput">URL Web App Google Apps Script (<span class="num-mono">/exec</span>)</label>
+          <input
+            type="url"
+            id="syncApiUrlInput"
+            class="form-input"
+            placeholder="https://script.google.com/macros/s/.../exec"
+          />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+          <button type="submit" class="submit-btn">Simpan &amp; Hubungkan</button>
+          <button type="button" class="icon-btn" id="forcePullSheetBtn" title="Ambil data terbaru langsung dari Google Spreadsheet">
+            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+              <path d="M16 16h5v5"></path>
+            </svg>
+            <span>Tarik dari Sheet</span>
+          </button>
+        </div>
+      </form>
+
+      <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border-color);">
+        <div class="form-label">Setup Database Baru (Google Apps Script)</div>
+        <button type="button" class="icon-btn" id="copyGasCodeBtn" style="width: 100%; margin-top: 4px;">
+          <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span>Salin Kode Backend (Code.gs)</span>
+        </button>
+      </div>
+
+      <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border-color);">
+        <div class="form-label">Cadangan Manual Data (JSON)</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
+          <button type="button" class="icon-btn" id="exportJsonBtn">
+            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Ekspor JSON</span>
+          </button>
+          <label class="icon-btn" style="cursor: pointer;">
+            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span>Impor JSON</span>
+            <input type="file" id="importJsonInput" accept="application/json" style="display: none;" />
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifikasi Ringan -->
+  <div class="toast-notification" id="toastNotification" role="status" aria-live="polite"></div>
+
+  <script>
+/**
+ * ============================================================================
+ * KONFIGURASI BAWAAN APLIKASI (PORTFOLIO READY)
+ * Seluruh data dinamis seperti nama, target, dan transaksi dikelola
+ * secara terpusat melalui Google Spreadsheet atau antarmuka aplikasi.
+ * ============================================================================
+ */
+const DEFAULT_TEMPLATE_CONFIG = {
+  roomId: 'tabungan-bersama',
+  scriptUrl: '',
+  brand: {
+    title: 'KitaTabung',
+    initials: 'KT',
+  },
+  goal: {
+    title: 'Target Tabungan Bersama',
+    targetAmount: 0,
+    splitMode: 'flexible',
+    splitRatio: 50,
+    quickAmounts: [100000, 250000, 500000, 1000000, 2500000],
+  },
+  members: {
+    member1: { id: 'member1', name: 'Partner 1' },
+    member2: { id: 'member2', name: 'Partner 2' },
+  },
+};
+
+const STORAGE_KEYS = {
+  STATE: 'kitatabung_state_v2',
+  STATE_LEGACY: 'kitatabung_state_v1',
+  HIDE_BALANCE: 'kitatabung_hide_balance_v2',
+  SYNC_CONFIG: 'kitatabung_sync_config_v2',
+  THEME: 'kitatabung_theme_v2',
+};
+
+/**
+ * Salinan Kode Google Apps Script (Code.gs)
+ */
+const GOOGLE_APPS_SCRIPT_TEMPLATE = `/**
+ * ============================================================================
+ * KitaTabung — Google Apps Script Backend Database (Code.gs)
+ * Arsitektur Database Google Spreadsheet untuk Aplikasi Tabungan Bersama
+ * ============================================================================
+ */
+
+function doGet(e) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    ensureSheetsExist_(ss);
+
+    var roomId = (e && e.parameter && e.parameter.roomId) ? e.parameter.roomId : 'tabungan-bersama';
+    var state = readStateFromSheets_(ss, roomId);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true, state: state }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function doPost(e) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    ensureSheetsExist_(ss);
+
+    var rawBody = (e && e.postData && e.postData.contents) ? e.postData.contents : '{}';
+    var payload = JSON.parse(rawBody);
+    var state = payload.state;
+
+    if (!state) {
+      throw new Error('Payload state kosong');
+    }
+
+    writeStateToSheets_(ss, state);
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true, updatedAt: state.updatedAt, state: state }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function ensureSheetsExist_(ss) {
+  var configSheet = ss.getSheetByName('Config');
+  if (!configSheet) {
+    configSheet = ss.insertSheet('Config');
+    configSheet.getRange('A1:C1').setValues([['Kunci Konfigurasi', 'Nilai', 'Keterangan (Bisa Diedit Langsung)']]);
+    configSheet.getRange('A1:C1').setFontWeight('bold');
+    configSheet.getRange('A2:C13').setValues([
+      ['roomId', 'tabungan-bersama', 'Kode ruang sinkronisasi tabungan'],
+      ['brandTitle', 'KitaTabung', 'Nama aplikasi di header'],
+      ['brandInitials', 'KT', 'Inisial logo aplikasi (maksimal 3 huruf)'],
+      ['goalTitle', 'Target Tabungan Bersama', 'Judul sasaran/target tabungan bersama'],
+      ['targetAmount', 0, 'Target nominal tabungan dalam Rupiah (0 = fleksibel)'],
+      ['targetDate', '', 'Tenggat waktu sasaran (format YYYY-MM-DD)'],
+      ['splitMode', 'flexible', 'Mode porsi kontribusi: flexible atau custom'],
+      ['splitRatio', 50, 'Persentase porsi Partner 1 (0 - 100)'],
+      ['member1Name', 'Partner 1', 'Nama Kontributor Pertama'],
+      ['member2Name', 'Partner 2', 'Nama Kontributor Kedua'],
+      ['quickAmounts', '100000,250000,500000,1000000,2500000', '5 nominal pintasan cepat tombol setor'],
+      ['updatedAt', new Date().toISOString(), 'Waktu pembaruan data terakhir (ISO)']
+    ]);
+    configSheet.autoResizeColumns(1, 3);
+  }
+
+  var txSheet = ss.getSheetByName('Transactions');
+  if (!txSheet) {
+    txSheet = ss.insertSheet('Transactions');
+    txSheet.getRange('A1:G1').setValues([[
+      'ID Transaksi', 'Tanggal', 'ID Kontributor', 'Nama Kontributor', 'Tipe (deposit/withdrawal)', 'Nominal', 'Catatan'
+    ]]);
+    txSheet.getRange('A1:G1').setFontWeight('bold');
+    txSheet.autoResizeColumns(1, 7);
+  }
+}
+
+function readStateFromSheets_(ss, requestedRoomId) {
+  var configSheet = ss.getSheetByName('Config');
+  var txSheet = ss.getSheetByName('Transactions');
+
+  var configRows = configSheet ? configSheet.getDataRange().getValues() : [];
+  var cfg = {};
+  for (var i = 1; i < configRows.length; i++) {
+    var k = String(configRows[i][0] || '').trim();
+    if (k) cfg[k] = configRows[i][1];
+  }
+
+  var m1Name = String(cfg.member1Name || 'Partner 1');
+  var m2Name = String(cfg.member2Name || 'Partner 2');
+
+  var txRows = txSheet ? txSheet.getDataRange().getValues() : [];
+  var transactions = [];
+  for (var j = 1; j < txRows.length; j++) {
+    var row = txRows[j];
+    if (!row[0] && !row[5]) continue;
+    var dateVal = row[1];
+    if (Object.prototype.toString.call(dateVal) === '[object Date]') {
+      dateVal = Utilities.formatDate(dateVal, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+    }
+
+    var rawMember = String(row[2] || 'member1').toLowerCase();
+    var isMember2 = (rawMember === 'member2' || rawMember === 'm2' || rawMember === 'partner2');
+    var memberId = isMember2 ? 'member2' : 'member1';
+
+    transactions.push({
+      id: String(row[0] || ('tx_sheet_' + j)),
+      date: String(dateVal || ''),
+      memberId: memberId,
+      type: String(row[4] || 'deposit').toLowerCase() === 'withdrawal' ? 'withdrawal' : 'deposit',
+      amount: Number(row[5]) || 0,
+      note: String(row[6] || '')
+    });
+  }
+
+  var quickArr = String(cfg.quickAmounts || '100000,250000,500000,1000000,2500000')
+    .split(',')
+    .map(function(n) { return parseInt(String(n).replace(/[^0-9]/g, ''), 10); })
+    .filter(function(n) { return n > 0; });
+
+  var targetDateStr = cfg.targetDate;
+  if (Object.prototype.toString.call(targetDateStr) === '[object Date]') {
+    targetDateStr = Utilities.formatDate(targetDateStr, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  }
+
+  var splitRatioVal = 50;
+  if (cfg.splitRatio !== undefined && cfg.splitRatio !== '') {
+    splitRatioVal = Number(cfg.splitRatio);
+  }
+
+  return {
+    roomId: String(cfg.roomId || requestedRoomId || 'tabungan-bersama'),
+    updatedAt: String(cfg.updatedAt || new Date().toISOString()),
+    brand: {
+      title: String(cfg.brandTitle || 'KitaTabung'),
+      initials: String(cfg.brandInitials || 'KT')
+    },
+    goal: {
+      title: String(cfg.goalTitle || 'Target Tabungan Bersama'),
+      targetAmount: Number(cfg.targetAmount) || 0,
+      targetDate: String(targetDateStr || ''),
+      splitMode: String(cfg.splitMode || 'flexible'),
+      splitRatio: splitRatioVal,
+      quickAmounts: quickArr.length === 5 ? quickArr : [100000, 250000, 500000, 1000000, 2500000]
+    },
+    members: {
+      member1: { id: 'member1', name: m1Name },
+      member2: { id: 'member2', name: m2Name }
+    },
+    transactions: transactions
+  };
+}
+
+function writeStateToSheets_(ss, state) {
+  var configSheet = ss.getSheetByName('Config');
+  var txSheet = ss.getSheetByName('Transactions');
+
+  var m1 = (state.members && state.members.member1 && state.members.member1.name)
+    ? state.members.member1.name
+    : 'Partner 1';
+  var m2 = (state.members && state.members.member2 && state.members.member2.name)
+    ? state.members.member2.name
+    : 'Partner 2';
+
+  var quickStr = (state.goal && Array.isArray(state.goal.quickAmounts))
+    ? state.goal.quickAmounts.join(',')
+    : '100000,250000,500000,1000000,2500000';
+
+  var ratioVal = (state.goal && state.goal.splitRatio !== undefined)
+    ? Number(state.goal.splitRatio)
+    : 50;
+
+  var configRows = [
+    ['roomId', state.roomId || 'tabungan-bersama', 'Kode ruang sinkronisasi tabungan'],
+    ['brandTitle', (state.brand && state.brand.title) || 'KitaTabung', 'Nama aplikasi di header'],
+    ['brandInitials', (state.brand && state.brand.initials) || 'KT', 'Inisial logo aplikasi (maksimal 3 huruf)'],
+    ['goalTitle', (state.goal && state.goal.title) || 'Target Tabungan Bersama', 'Judul sasaran/target tabungan bersama'],
+    ['targetAmount', Number(state.goal && state.goal.targetAmount) || 0, 'Target nominal tabungan dalam Rupiah (0 = fleksibel)'],
+    ['targetDate', (state.goal && state.goal.targetDate) || '', 'Tenggat waktu sasaran (format YYYY-MM-DD)'],
+    ['splitMode', (state.goal && state.goal.splitMode) || 'flexible', 'Mode porsi kontribusi: flexible atau custom'],
+    ['splitRatio', ratioVal, 'Persentase porsi Partner 1 (0 - 100)'],
+    ['member1Name', m1, 'Nama Kontributor Pertama'],
+    ['member2Name', m2, 'Nama Kontributor Kedua'],
+    ['quickAmounts', quickStr, '5 nominal pintasan cepat tombol setor'],
+    ['updatedAt', state.updatedAt || new Date().toISOString(), 'Waktu pembaruan data terakhir (ISO)']
+  ];
+  configSheet.getRange(2, 1, configRows.length, 3).setValues(configRows);
+
+  var lastRow = txSheet.getLastRow();
+  if (lastRow > 1) {
+    txSheet.getRange(2, 1, lastRow - 1, 7).clearContent();
+  }
+
+  var txs = Array.isArray(state.transactions) ? state.transactions : [];
+  if (txs.length > 0) {
+    var rows = txs.map(function(t) {
+      var isM2 = (t.memberId === 'member2' || t.memberId === 'm2' || t.memberId === 'partner2');
+      return [
+        t.id || '',
+        t.date || '',
+        isM2 ? 'member2' : 'member1',
+        isM2 ? m2 : m1,
+        t.type || 'deposit',
+        Number(t.amount) || 0,
+        t.note || ''
+      ];
+    });
+    txSheet.getRange(2, 1, rows.length, 7).setValues(rows);
+  }
+}`;
+
+/**
+ * 1. Utilitas Pemformatan Mata Uang & Waktu
+ */
+const CurrencyUtils = {
+  formatRupiah(amount, isHidden = false) {
+    if (isHidden) return 'Rp ••••••••';
+    const numeric = Number(amount) || 0;
+    const sign = numeric < 0 ? '-' : '';
+    const formatted = new Intl.NumberFormat('id-ID').format(Math.abs(Math.round(numeric)));
+    return `${sign}Rp ${formatted}`;
+  },
+
+  formatCompactChip(amount) {
+    const num = Number(amount) || 0;
+    if (num >= 1000000) {
+      const jt = num / 1000000;
+      const label = Number.isInteger(jt) ? String(jt) : jt.toFixed(1).replace('.', ',');
+      return `<span class="num-mono">+${label}</span>jt`;
+    }
+    if (num >= 1000) {
+      const rb = Math.round(num / 1000);
+      return `<span class="num-mono">+${rb}</span>rb`;
+    }
+    return `<span class="num-mono">+${num}</span>`;
+  },
+
+  parseDigits(rawString) {
+    if (!rawString) return 0;
+    const cleaned = String(rawString).replace(/[^0-9]/g, '');
+    return cleaned ? parseInt(cleaned, 10) : 0;
+  },
+
+  formatInputThousand(rawString) {
+    const num = this.parseDigits(rawString);
+    if (!num) return '';
+    return new Intl.NumberFormat('id-ID').format(num);
+  },
+
+  getDefaultOneYearDeadline() {
+    const now = new Date();
+    now.setFullYear(now.getFullYear() + 1);
+    return now.toISOString().split('T')[0];
+  },
+
+  getTodayISO() {
+    return new Date().toISOString().split('T')[0];
+  },
+
+  formatDateID(isoDate) {
+    if (!isoDate) return '-';
+    const date = new Date(`${isoDate}T00:00:00`);
+    if (Number.isNaN(date.getTime())) return isoDate;
+    return date.toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+  },
+};
+
+/**
+ * 2. Logika Bisnis & Perhitungan Tabungan
+ */
+const SavingsCalculator = {
+  calculateSummary(state) {
+    const transactions = Array.isArray(state.transactions) ? state.transactions : [];
+    let m1Net = 0;
+    let m2Net = 0;
+    let totalDeposits = 0;
+    let totalWithdrawals = 0;
+
+    for (const tx of transactions) {
+      const amount = Number(tx.amount) || 0;
+      const delta = tx.type === 'withdrawal' ? -amount : amount;
+
+      if (tx.type === 'withdrawal') {
+        totalWithdrawals += amount;
+      } else {
+        totalDeposits += amount;
+      }
+
+      const isM2 = (tx.memberId === 'member2' || tx.memberId === 'm2');
+      if (isM2) {
+        m2Net += delta;
+      } else {
+        m1Net += delta;
+      }
+    }
+
+    const totalBalance = m1Net + m2Net;
+    const targetAmount = Math.max(0, Number(state.goal?.targetAmount) || 0);
+    const remainingAmount = targetAmount > 0 ? Math.max(0, targetAmount - totalBalance) : 0;
+
+    const overallProgressPct =
+      targetAmount > 0 ? Math.min(100, Math.max(0, (totalBalance / targetAmount) * 100)) : 0;
+
+    const positiveTotal = Math.max(0, m1Net) + Math.max(0, m2Net);
+    const m1SharePct = positiveTotal > 0 ? (Math.max(0, m1Net) / positiveTotal) * 100 : 0;
+    const m2SharePct = positiveTotal > 0 ? (Math.max(0, m2Net) / positiveTotal) * 100 : 0;
+
+    let m1BarWidth = 0;
+    let m2BarWidth = 0;
+    if (targetAmount > 0 && positiveTotal > 0) {
+      m1BarWidth = Math.min(100, (Math.max(0, m1Net) / targetAmount) * 100);
+      m2BarWidth = Math.min(100 - m1BarWidth, (Math.max(0, m2Net) / targetAmount) * 100);
+    } else if (targetAmount === 0 && positiveTotal > 0) {
+      m1BarWidth = m1SharePct;
+      m2BarWidth = m2SharePct;
+    }
+
+    const now = new Date();
+    const deadline = state.goal?.targetDate ? new Date(`${state.goal.targetDate}T23:59:59`) : null;
+    let monthsRemaining = 12;
+    let daysRemaining = 365;
+    if (deadline && !Number.isNaN(deadline.getTime())) {
+      const diffMs = deadline.getTime() - now.getTime();
+      daysRemaining = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+      monthsRemaining = Math.max(1, Math.ceil(daysRemaining / 30.4375));
+    }
+
+    const recommendedMonthly =
+      targetAmount > 0 && remainingAmount > 0 ? Math.ceil(remainingAmount / monthsRemaining) : 0;
+
+    const splitRatio = Number(state.goal?.splitRatio ?? 50);
+    const m1Ratio = splitRatio;
+    const m2Ratio = 100 - splitRatio;
+
+    const m1TargetAmount = targetAmount > 0 ? (targetAmount * m1Ratio) / 100 : 0;
+    const m2TargetAmount = targetAmount > 0 ? (targetAmount * m2Ratio) / 100 : 0;
+
+    const m1TargetProgressPct =
+      m1TargetAmount > 0 ? Math.min(100, Math.max(0, (m1Net / m1TargetAmount) * 100)) : 0;
+    const m2TargetProgressPct =
+      m2TargetAmount > 0 ? Math.min(100, Math.max(0, (m2Net / m2TargetAmount) * 100)) : 0;
+
+    return {
+      totalBalance,
+      targetAmount,
+      remainingAmount,
+      overallProgressPct,
+      m1Net,
+      m2Net,
+      m1SharePct,
+      m2SharePct,
+      m1BarWidth,
+      m2BarWidth,
+      daysRemaining,
+      monthsRemaining,
+      recommendedMonthly,
+      m1Ratio,
+      m2Ratio,
+      m1TargetAmount,
+      m2TargetAmount,
+      m1TargetProgressPct,
+      m2TargetProgressPct,
+      totalDeposits,
+      totalWithdrawals,
+    };
+  },
+};
+
+/**
+ * 3. Store Penyimpanan & Sinkronisasi
+ */
+const SyncAndCacheStore = {
+  getDefaultState() {
+    return {
+      roomId: DEFAULT_TEMPLATE_CONFIG.roomId,
+      updatedAt: new Date().toISOString(),
+      brand: {
+        title: DEFAULT_TEMPLATE_CONFIG.brand.title,
+        initials: DEFAULT_TEMPLATE_CONFIG.brand.initials,
+      },
+      goal: {
+        title: DEFAULT_TEMPLATE_CONFIG.goal.title,
+        targetAmount: DEFAULT_TEMPLATE_CONFIG.goal.targetAmount,
+        targetDate: CurrencyUtils.getDefaultOneYearDeadline(),
+        splitMode: DEFAULT_TEMPLATE_CONFIG.goal.splitMode,
+        splitRatio: DEFAULT_TEMPLATE_CONFIG.goal.splitRatio,
+        quickAmounts: [...DEFAULT_TEMPLATE_CONFIG.goal.quickAmounts],
+      },
+      members: {
+        member1: { ...DEFAULT_TEMPLATE_CONFIG.members.member1 },
+        member2: { ...DEFAULT_TEMPLATE_CONFIG.members.member2 },
+      },
+      transactions: [],
+    };
+  },
+
+  normalizeState(rawState) {
+    const def = this.getDefaultState();
+    const parsed = rawState || {};
+
+    const m1Name = parsed.members?.member1?.name || def.members.member1.name;
+    const m2Name = parsed.members?.member2?.name || def.members.member2.name;
+
+    const ratio =
+      parsed.goal?.splitRatio !== undefined
+        ? Number(parsed.goal.splitRatio)
+        : def.goal.splitRatio;
+
+    const merged = {
+      ...def,
+      ...parsed,
+      brand: {
+        ...def.brand,
+        ...(parsed.brand || {}),
+      },
+      goal: {
+        ...def.goal,
+        ...(parsed.goal || {}),
+        splitRatio: ratio,
+      },
+      members: {
+        member1: { id: 'member1', name: m1Name },
+        member2: { id: 'member2', name: m2Name },
+      },
+      transactions: (Array.isArray(parsed.transactions) ? parsed.transactions : []).map((t) => {
+        const isM2 = t.memberId === 'member2' || t.memberId === 'm2' || t.memberId === 'partner2';
+        return {
+          ...t,
+          memberId: isM2 ? 'member2' : 'member1',
+        };
+      }),
+    };
+
+    if (!Array.isArray(merged.goal.quickAmounts) || merged.goal.quickAmounts.length === 0) {
+      merged.goal.quickAmounts = [...def.goal.quickAmounts];
+    }
+    if (!merged.goal.targetDate) {
+      merged.goal.targetDate = CurrencyUtils.getDefaultOneYearDeadline();
+    }
+    return merged;
+  },
+
+  loadStateFromLocalCache() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.STATE) || localStorage.getItem(STORAGE_KEYS.STATE_LEGACY);
+      if (!raw) {
+        const initial = this.getDefaultState();
+        this.saveStateToLocalCache(initial);
+        return initial;
+      }
+      return this.normalizeState(JSON.parse(raw));
+    } catch {
+      return this.getDefaultState();
+    }
+  },
+
+  saveStateToLocalCache(state) {
+    try {
+      state.updatedAt = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEYS.STATE, JSON.stringify(state));
+    } catch (err) {
+      console.error('Gagal menyimpan ke localStorage:', err);
+    }
+  },
+
+  loadHideBalancePref() {
+    try {
+      return localStorage.getItem(STORAGE_KEYS.HIDE_BALANCE) === 'true';
+    } catch {
+      return false;
+    }
+  },
+
+  saveHideBalancePref(isHidden) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.HIDE_BALANCE, String(Boolean(isHidden)));
+    } catch {}
+  },
+
+  loadThemePref() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.THEME);
+      if (saved === 'dark' || saved === 'light') return saved;
+      return 'light'; // Default tema terang
+    } catch {
+      return 'light';
+    }
+  },
+
+  saveThemePref(theme) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.THEME, theme);
+    } catch {}
+  },
+
+  loadSyncConfig() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.SYNC_CONFIG);
+      if (!raw) {
+        return {
+          apiUrl: DEFAULT_TEMPLATE_CONFIG.scriptUrl || '',
+          roomId: DEFAULT_TEMPLATE_CONFIG.roomId || 'tabungan-bersama',
+        };
+      }
+      return JSON.parse(raw);
+    } catch {
+      return {
+        apiUrl: DEFAULT_TEMPLATE_CONFIG.scriptUrl || '',
+        roomId: 'tabungan-bersama',
+      };
+    }
+  },
+
+  saveSyncConfig(config) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.SYNC_CONFIG, JSON.stringify(config));
+    } catch {}
+  },
+
+  isGoogleAppsScriptUrl(url) {
+    return /script\.google\.com\/macros\/s\//i.test(String(url || ''));
+  },
+
+  async pullFromServer(config, currentState, forceOverwriteLocal = false) {
+    const rawUrl = String(config.apiUrl || '').trim();
+    if (!rawUrl) {
+      throw new Error('URL database belum diatur');
+    }
+
+    const separator = rawUrl.includes('?') ? '&' : '?';
+    const endpoint = `${rawUrl}${separator}action=get&roomId=${encodeURIComponent(config.roomId)}&t=${Date.now()}`;
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      redirect: 'follow',
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    const payload = await response.json();
+    if (payload && payload.ok && payload.state) {
+      const normalizedServer = this.normalizeState(payload.state);
+      const serverTime = new Date(normalizedServer.updatedAt || 0).getTime();
+      const localTime = new Date(currentState.updatedAt || 0).getTime();
+
+      if (
+        forceOverwriteLocal ||
+        serverTime >= localTime ||
+        (currentState.transactions.length === 0 && normalizedServer.transactions.length > 0)
+      ) {
+        this.saveStateToLocalCache(normalizedServer);
+        return { status: 'updated_from_server', state: normalizedServer };
+      }
+    }
+    return { status: 'kept_local', state: currentState };
+  },
+
+  async pushToServer(config, state) {
+    const rawUrl = String(config.apiUrl || '').trim();
+    if (!rawUrl) {
+      throw new Error('URL database belum diatur');
+    }
+
+    const response = await fetch(rawUrl, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'sync',
+        roomId: config.roomId,
+        state,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    return await response.json();
+  },
+};
+
+/**
+ * 4. Pengendali Antarmuka Aplikasi (UI Controller)
+ */
+const AppController = {
+  state: null,
+  hideBalance: false,
+  theme: 'light',
+  syncConfig: null,
+  activeTxType: 'deposit',
+  activeMember: 'member1',
+  activeFilter: 'all',
+
+  init() {
+    if (window.__KITATABUNG_INITIALIZED__) return;
+    window.__KITATABUNG_INITIALIZED__ = true;
+
+    this.state = SyncAndCacheStore.loadStateFromLocalCache();
+    this.hideBalance = SyncAndCacheStore.loadHideBalancePref();
+    this.theme = SyncAndCacheStore.loadThemePref();
+    this.syncConfig = SyncAndCacheStore.loadSyncConfig();
+    this.state.roomId = this.syncConfig.roomId;
+
+    this.applyTheme(this.theme);
+    this.bindEvents();
+    this.setDefaultFormDate();
+    this.renderAll();
+
+    if (this.syncConfig.apiUrl) {
+      this.attemptBackgroundSync(false);
+    }
+  },
+
+  getMemberName(memberId) {
+    if (memberId === 'member2' || memberId === 'm2' || memberId === 'partner2') {
+      return this.state.members?.member2?.name || 'Partner 2';
+    }
+    return this.state.members?.member1?.name || 'Partner 1';
+  },
+
+  applyTheme(theme) {
+    this.theme = theme === 'dark' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', this.theme);
+
+    const toggleBtn = document.getElementById('themeToggleBtn');
+    const iconContainer = document.getElementById('themeIconContainer');
+    const metaTheme = document.getElementById('metaThemeColor');
+
+    if (toggleBtn) {
+      toggleBtn.setAttribute('aria-checked', String(this.theme === 'dark'));
+    }
+    if (metaTheme) {
+      metaTheme.setAttribute('content', this.theme === 'dark' ? '#090D16' : '#0D9488');
+    }
+    if (iconContainer) {
+      iconContainer.innerHTML =
+        this.theme === 'dark'
+          ? `<svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>`
+          : `<svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>`;
+    }
+  },
+
+  setDefaultFormDate() {
+    const dateInput = document.getElementById('txDateInput');
+    if (dateInput && !dateInput.value) {
+      dateInput.value = CurrencyUtils.getTodayISO();
+    }
+  },
+
+  bindEvents() {
+    // Alihkan Mode Tema
+    document.getElementById('themeToggleBtn')?.addEventListener('click', () => {
+      const nextTheme = this.theme === 'dark' ? 'light' : 'dark';
+      this.applyTheme(nextTheme);
+      SyncAndCacheStore.saveThemePref(nextTheme);
+      this.showToast(nextTheme === 'dark' ? 'Mode gelap aktif' : 'Mode terang aktif (default)');
+    });
+
+    // Sembunyikan / Tampilkan Saldo
+    document.getElementById('toggleHideBalanceBtn')?.addEventListener('click', () => {
+      this.hideBalance = !this.hideBalance;
+      SyncAndCacheStore.saveHideBalancePref(this.hideBalance);
+      this.renderAll();
+      this.showToast(this.hideBalance ? 'Nominal saldo disembunyikan' : 'Nominal saldo ditampilkan');
+    });
+
+    // Tipe Transaksi (Setor / Tarik)
+    document.querySelectorAll('[data-tx-type]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        this.activeTxType = btn.getAttribute('data-tx-type');
+        this.updateFormModeUI();
+      });
+    });
+
+    // Pilih Kontributor
+    document.querySelectorAll('input[name="txMember"]').forEach((radio) => {
+      radio.addEventListener('change', (e) => {
+        this.activeMember = e.target.value;
+        this.updateMemberSelectorUI();
+      });
+    });
+
+    // Format Rupiah Otomatis saat Mengetik
+    const amountInput = document.getElementById('txAmountInput');
+    amountInput?.addEventListener('input', (e) => {
+      e.target.value = CurrencyUtils.formatInputThousand(e.target.value);
+    });
+
+    // Tombol Pintasan Cepat
+    const quickChips = document.getElementById('quickChipsContainer');
+    if (quickChips && amountInput) {
+      quickChips.addEventListener('click', (e) => {
+        const chip = e.target.closest('[data-quick-amount]');
+        if (!chip) return;
+        const addVal = parseInt(chip.getAttribute('data-quick-amount'), 10) || 0;
+        const currentVal = CurrencyUtils.parseDigits(amountInput.value);
+        amountInput.value = CurrencyUtils.formatInputThousand(currentVal + addVal);
+        amountInput.focus();
+      });
+    }
+
+    // Submit Formulir Transaksi
+    document.getElementById('transactionForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.handleAddTransaction();
+    });
+
+    // Filter Riwayat Transaksi
+    document.querySelectorAll('[data-filter-member]').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        this.activeFilter = tab.getAttribute('data-filter-member');
+        document.querySelectorAll('[data-filter-member]').forEach((t) => {
+          t.classList.toggle('active', t === tab);
+        });
+        this.renderTransactionList();
+      });
+    });
+
+    // Modal Target & Profil
+    document.getElementById('openGoalModalBtn')?.addEventListener('click', () => {
+      this.openGoalModal();
+    });
+    document.getElementById('closeGoalModalBtn')?.addEventListener('click', () => {
+      document.getElementById('goalModalBackdrop')?.classList.remove('open');
+    });
+
+    const goalTargetInput = document.getElementById('goalTargetAmountInput');
+    goalTargetInput?.addEventListener('input', (e) => {
+      e.target.value = CurrencyUtils.formatInputThousand(e.target.value);
+    });
+
+    document.getElementById('goalSplitModeSelect')?.addEventListener('change', (e) => {
+      const ratioBox = document.getElementById('customRatioContainer');
+      if (ratioBox) {
+        ratioBox.style.display = e.target.value === 'custom' ? 'block' : 'none';
+      }
+    });
+
+    const ratioSlider = document.getElementById('goalSplitRatioSlider');
+    const member1Input = document.getElementById('member1NameInput');
+    const member2Input = document.getElementById('member2NameInput');
+
+    const updateRatioPreview = () => {
+      const m1Pct = parseInt(ratioSlider?.value, 10) || 50;
+      const m2Pct = 100 - m1Pct;
+      const name1 = (member1Input?.value || '').trim() || this.getMemberName('member1');
+      const name2 = (member2Input?.value || '').trim() || this.getMemberName('member2');
+      const label = document.getElementById('ratioPreviewLabel');
+      if (label) {
+        label.innerHTML = `${this.escapeHtml(name1)} <span class="num-mono">${m1Pct}%</span> : ${this.escapeHtml(name2)} <span class="num-mono">${m2Pct}%</span>`;
+      }
+    };
+
+    ratioSlider?.addEventListener('input', updateRatioPreview);
+    member1Input?.addEventListener('input', updateRatioPreview);
+    member2Input?.addEventListener('input', updateRatioPreview);
+
+    document.getElementById('goalSettingsForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.handleSaveGoalSettings();
+    });
+
+    // Modal Database & Sinkronisasi
+    document.getElementById('openSyncModalBtn')?.addEventListener('click', () => {
+      this.openSyncModal();
+    });
+    document.getElementById('closeSyncModalBtn')?.addEventListener('click', () => {
+      document.getElementById('syncModalBackdrop')?.classList.remove('open');
+    });
+
+    document.getElementById('syncConfigForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.handleSaveSyncConfig();
+    });
+
+    document.getElementById('forcePullSheetBtn')?.addEventListener('click', () => {
+      this.handleForcePullFromSheet();
+    });
+
+    document.getElementById('copyGasCodeBtn')?.addEventListener('click', () => {
+      this.copyAppsScriptCode();
+    });
+
+    document.getElementById('exportJsonBtn')?.addEventListener('click', () => {
+      this.exportBackupJson();
+    });
+
+    document.getElementById('importJsonInput')?.addEventListener('change', (e) => {
+      this.importBackupJson(e);
+    });
+  },
+
+  updateFormModeUI() {
+    document.querySelectorAll('[data-tx-type]').forEach((btn) => {
+      const type = btn.getAttribute('data-tx-type');
+      btn.classList.toggle('active', type === this.activeTxType);
+    });
+
+    const submitBtn = document.getElementById('submitTxBtn');
+    if (submitBtn) {
+      if (this.activeTxType === 'withdrawal') {
+        submitBtn.textContent = 'Catat Tarik Saldo (-)';
+        submitBtn.classList.add('withdrawal-mode');
+      } else {
+        submitBtn.textContent = 'Simpan Setoran (+)';
+        submitBtn.classList.remove('withdrawal-mode');
+      }
+    }
+  },
+
+  updateMemberSelectorUI() {
+    const m1Label = document.getElementById('memberLabelM1');
+    const m2Label = document.getElementById('memberLabelM2');
+    if (m1Label && m2Label) {
+      m1Label.classList.toggle('selected-m1', this.activeMember === 'member1');
+      m2Label.classList.toggle('selected-m2', this.activeMember === 'member2');
+    }
+  },
+
+  handleAddTransaction() {
+    const amountInput = document.getElementById('txAmountInput');
+    const dateInput = document.getElementById('txDateInput');
+    const noteInput = document.getElementById('txNoteInput');
+
+    const amount = CurrencyUtils.parseDigits(amountInput?.value);
+    if (amount <= 0) {
+      this.showToast('Masukkan nominal Rupiah yang valid (> 0)');
+      amountInput?.focus();
+      return;
+    }
+
+    const summary = SavingsCalculator.calculateSummary(this.state);
+    if (this.activeTxType === 'withdrawal' && amount > summary.totalBalance) {
+      this.showToast('Nominal penarikan melebihi total saldo tabungan');
+      return;
+    }
+
+    const newTx = {
+      id: `tx_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      memberId: this.activeMember,
+      type: this.activeTxType,
+      amount,
+      date: dateInput?.value || CurrencyUtils.getTodayISO(),
+      note: (noteInput?.value || '').trim() || (this.activeTxType === 'withdrawal' ? 'Tarik Saldo' : 'Setoran Tabungan'),
+      createdAt: new Date().toISOString(),
+    };
+
+    this.state.transactions.unshift(newTx);
+    SyncAndCacheStore.saveStateToLocalCache(this.state);
+
+    if (amountInput) amountInput.value = '';
+    if (noteInput) noteInput.value = '';
+
+    this.renderAll();
+    this.pushStateToServerQuietly();
+
+    const memberName = this.getMemberName(this.activeMember);
+    const actionLabel = this.activeTxType === 'withdrawal' ? 'Penarikan' : 'Setoran';
+    this.showToast(`${actionLabel} ${memberName} tersimpan`);
+  },
+
+  deleteTransaction(txId) {
+    this.state.transactions = this.state.transactions.filter((t) => t.id !== txId);
+    SyncAndCacheStore.saveStateToLocalCache(this.state);
+    this.renderAll();
+    this.pushStateToServerQuietly();
+    this.showToast('Catatan transaksi dihapus');
+  },
+
+  openGoalModal() {
+    const titleInput = document.getElementById('goalTitleInput');
+    const member1Input = document.getElementById('member1NameInput');
+    const member2Input = document.getElementById('member2NameInput');
+    const targetInput = document.getElementById('goalTargetAmountInput');
+    const dateInput = document.getElementById('goalTargetDateInput');
+    const splitSelect = document.getElementById('goalSplitModeSelect');
+    const ratioSlider = document.getElementById('goalSplitRatioSlider');
+    const ratioContainer = document.getElementById('customRatioContainer');
+    const ratioLabel = document.getElementById('ratioPreviewLabel');
+    const brandTitleInput = document.getElementById('appBrandTitleInput');
+    const brandInitialsInput = document.getElementById('appBrandInitialsInput');
+    const quickAmountsInput = document.getElementById('quickAmountsInput');
+
+    const m1 = this.getMemberName('member1');
+    const m2 = this.getMemberName('member2');
+
+    if (titleInput) titleInput.value = this.state.goal?.title || 'Target Tabungan Bersama';
+    if (member1Input) member1Input.value = m1;
+    if (member2Input) member2Input.value = m2;
+    if (targetInput) {
+      targetInput.value =
+        this.state.goal?.targetAmount > 0
+          ? CurrencyUtils.formatInputThousand(this.state.goal.targetAmount)
+          : '0';
+    }
+    if (dateInput) {
+      dateInput.value = this.state.goal?.targetDate || CurrencyUtils.getDefaultOneYearDeadline();
+    }
+    if (splitSelect) splitSelect.value = this.state.goal?.splitMode || 'flexible';
+
+    const ratioVal = Number(this.state.goal?.splitRatio ?? 50);
+    if (ratioSlider) ratioSlider.value = ratioVal;
+
+    if (ratioLabel) {
+      ratioLabel.innerHTML = `${this.escapeHtml(m1)} <span class="num-mono">${ratioVal}%</span> : ${this.escapeHtml(m2)} <span class="num-mono">${100 - ratioVal}%</span>`;
+    }
+    if (ratioContainer) {
+      ratioContainer.style.display = this.state.goal?.splitMode === 'custom' ? 'block' : 'none';
+    }
+
+    if (brandTitleInput) brandTitleInput.value = this.state.brand?.title || 'KitaTabung';
+    if (brandInitialsInput) brandInitialsInput.value = this.state.brand?.initials || 'KT';
+    if (quickAmountsInput) {
+      const currentChips = Array.isArray(this.state.goal?.quickAmounts)
+        ? this.state.goal.quickAmounts
+        : DEFAULT_TEMPLATE_CONFIG.goal.quickAmounts;
+      quickAmountsInput.value = currentChips.join(', ');
+    }
+
+    document.getElementById('goalModalBackdrop')?.classList.add('open');
+  },
+
+  handleSaveGoalSettings() {
+    const titleInput = document.getElementById('goalTitleInput');
+    const member1Input = document.getElementById('member1NameInput');
+    const member2Input = document.getElementById('member2NameInput');
+    const targetInput = document.getElementById('goalTargetAmountInput');
+    const dateInput = document.getElementById('goalTargetDateInput');
+    const splitSelect = document.getElementById('goalSplitModeSelect');
+    const ratioSlider = document.getElementById('goalSplitRatioSlider');
+    const brandTitleInput = document.getElementById('appBrandTitleInput');
+    const brandInitialsInput = document.getElementById('appBrandInitialsInput');
+    const quickAmountsInput = document.getElementById('quickAmountsInput');
+
+    this.state.goal.title = (titleInput?.value || '').trim() || 'Target Tabungan Bersama';
+    this.state.goal.targetAmount = CurrencyUtils.parseDigits(targetInput?.value);
+    this.state.goal.targetDate = dateInput?.value || CurrencyUtils.getDefaultOneYearDeadline();
+    this.state.goal.splitMode = splitSelect?.value || 'flexible';
+    this.state.goal.splitRatio = parseInt(ratioSlider?.value, 10) ?? 50;
+
+    const name1 = (member1Input?.value || '').trim() || 'Partner 1';
+    const name2 = (member2Input?.value || '').trim() || 'Partner 2';
+    this.state.members = {
+      member1: { id: 'member1', name: name1 },
+      member2: { id: 'member2', name: name2 },
+    };
+
+    this.state.brand = {
+      title: (brandTitleInput?.value || '').trim() || 'KitaTabung',
+      initials: ((brandInitialsInput?.value || '').trim() || 'KT').toUpperCase().slice(0, 3),
+    };
+
+    const parsedChips = String(quickAmountsInput?.value || '')
+      .split(',')
+      .map((s) => CurrencyUtils.parseDigits(s))
+      .filter((n) => n > 0)
+      .slice(0, 5);
+
+    if (parsedChips.length > 0) {
+      this.state.goal.quickAmounts = parsedChips;
+    }
+
+    SyncAndCacheStore.saveStateToLocalCache(this.state);
+    document.getElementById('goalModalBackdrop')?.classList.remove('open');
+    this.renderAll();
+    this.pushStateToServerQuietly();
+    this.showToast('Pengaturan target berhasil diperbarui');
+  },
+
+  openSyncModal() {
+    const apiInput = document.getElementById('syncApiUrlInput');
+    const roomInput = document.getElementById('syncRoomIdInput');
+    if (apiInput) apiInput.value = this.syncConfig.apiUrl || '';
+    if (roomInput) roomInput.value = this.syncConfig.roomId || 'tabungan-bersama';
+    document.getElementById('syncModalBackdrop')?.classList.add('open');
+  },
+
+  async handleSaveSyncConfig() {
+    const apiInput = document.getElementById('syncApiUrlInput');
+    const roomInput = document.getElementById('syncRoomIdInput');
+    this.syncConfig.apiUrl = (apiInput?.value || '').trim();
+    this.syncConfig.roomId = (roomInput?.value || '').trim() || 'tabungan-bersama';
+    this.state.roomId = this.syncConfig.roomId;
+
+    SyncAndCacheStore.saveSyncConfig(this.syncConfig);
+    SyncAndCacheStore.saveStateToLocalCache(this.state);
+    document.getElementById('syncModalBackdrop')?.classList.remove('open');
+
+    if (!this.syncConfig.apiUrl) {
+      this.updateSyncBadgeUI(false);
+      this.showToast('Tersimpan di Cache Lokal');
+      return;
+    }
+
+    await this.attemptBackgroundSync(true);
+  },
+
+  async handleForcePullFromSheet() {
+    const apiInput = document.getElementById('syncApiUrlInput');
+    const roomInput = document.getElementById('syncRoomIdInput');
+    if (apiInput?.value) this.syncConfig.apiUrl = apiInput.value.trim();
+    if (roomInput?.value) this.syncConfig.roomId = roomInput.value.trim() || 'tabungan-bersama';
+
+    if (!this.syncConfig.apiUrl) {
+      this.showToast('Masukkan URL Web App Google Apps Script');
+      return;
+    }
+
+    SyncAndCacheStore.saveSyncConfig(this.syncConfig);
+    try {
+      this.showToast('Mengambil data dari Google Spreadsheet...');
+      const result = await SyncAndCacheStore.pullFromServer(this.syncConfig, this.state, true);
+      this.state = result.state;
+      this.renderAll();
+      this.updateSyncBadgeUI(true);
+      document.getElementById('syncModalBackdrop')?.classList.remove('open');
+      this.showToast('Data berhasil disinkronkan dari Spreadsheet');
+    } catch {
+      this.updateSyncBadgeUI(false);
+      this.showToast('Gagal menarik data. Periksa izin akses Web App');
+    }
+  },
+
+  updateSyncBadgeUI(isOnline) {
+    const statusText = document.getElementById('syncStatusText');
+    const syncDot = document.getElementById('syncStatusDot');
+    if (statusText) {
+      statusText.textContent = isOnline ? 'Spreadsheet Aktif' : 'Cache Lokal';
+    }
+    if (syncDot) {
+      syncDot.classList.toggle('offline', !isOnline);
+    }
+  },
+
+  async attemptBackgroundSync(showNotification = false) {
+    if (!this.syncConfig.apiUrl) {
+      this.updateSyncBadgeUI(false);
+      return;
+    }
+    try {
+      const result = await SyncAndCacheStore.pullFromServer(this.syncConfig, this.state, false);
+      if (result.status === 'updated_from_server') {
+        this.state = result.state;
+        this.renderAll();
+      } else {
+        await SyncAndCacheStore.pushToServer(this.syncConfig, this.state);
+      }
+      this.updateSyncBadgeUI(true);
+      if (showNotification) {
+        this.showToast('Terhubung ke Google Spreadsheet');
+      }
+    } catch {
+      this.updateSyncBadgeUI(false);
+      if (showNotification) {
+        this.showToast('Disimpan di cache lokal (Periksa URL Web App)');
+      }
+    }
+  },
+
+  async pushStateToServerQuietly() {
+    if (!this.syncConfig.apiUrl) return;
+    try {
+      await SyncAndCacheStore.pushToServer(this.syncConfig, this.state);
+      this.updateSyncBadgeUI(true);
+    } catch {
+      this.updateSyncBadgeUI(false);
+    }
+  },
+
+  copyAppsScriptCode() {
+    const copySuccess = () => this.showToast('Kode Code.gs berhasil disalin!');
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(GOOGLE_APPS_SCRIPT_TEMPLATE).then(copySuccess).catch(() => {
+          this.fallbackCopyText(GOOGLE_APPS_SCRIPT_TEMPLATE);
+        });
+      } else {
+        this.fallbackCopyText(GOOGLE_APPS_SCRIPT_TEMPLATE);
+      }
+    } catch {
+      this.fallbackCopyText(GOOGLE_APPS_SCRIPT_TEMPLATE);
+    }
+  },
+
+  fallbackCopyText(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      this.showToast('Kode Code.gs berhasil disalin!');
+    } catch {
+      this.showToast('Gagal menyalin otomatis');
+    }
+    ta.remove();
+  },
+
+  exportBackupJson() {
+    const dataStr = JSON.stringify(this.state, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `kitatabung_${this.state.roomId}_${CurrencyUtils.getTodayISO()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    this.showToast('Cadangan JSON berhasil diunduh');
+  },
+
+  importBackupJson(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(String(e.target?.result || '{}'));
+        if (imported && imported.goal && Array.isArray(imported.transactions)) {
+          this.state = SyncAndCacheStore.normalizeState(imported);
+          SyncAndCacheStore.saveStateToLocalCache(this.state);
+          this.renderAll();
+          this.pushStateToServerQuietly();
+          document.getElementById('syncModalBackdrop')?.classList.remove('open');
+          this.showToast('Data berhasil dipulihkan');
+        } else {
+          this.showToast('Format file JSON tidak sesuai');
+        }
+      } catch {
+        this.showToast('Gagal membaca file JSON');
+      }
+    };
+    reader.readAsText(file);
+  },
+
+  renderQuickChips() {
+    const container = document.getElementById('quickChipsContainer');
+    if (!container) return;
+    const amounts =
+      Array.isArray(this.state.goal?.quickAmounts) && this.state.goal.quickAmounts.length > 0
+        ? this.state.goal.quickAmounts
+        : DEFAULT_TEMPLATE_CONFIG.goal.quickAmounts;
+
+    container.style.gridTemplateColumns = `repeat(${amounts.length}, minmax(0, 1fr))`;
+    container.innerHTML = amounts
+      .map(
+        (amt) =>
+          `<button type="button" class="chip-btn" data-quick-amount="${amt}">${CurrencyUtils.formatCompactChip(amt)}</button>`
+      )
+      .join('');
+  },
+
+  renderAll() {
+    const summary = SavingsCalculator.calculateSummary(this.state);
+    const name1 = this.getMemberName('member1');
+    const name2 = this.getMemberName('member2');
+
+    // Identitas Brand
+    const brandTitleEl = document.getElementById('brandTitleDisplay');
+    const brandLogoEl = document.getElementById('brandLogoDisplay');
+    if (brandTitleEl) brandTitleEl.textContent = this.state.brand?.title || 'KitaTabung';
+    if (brandLogoEl) brandLogoEl.textContent = this.state.brand?.initials || 'KT';
+
+    // Nama Kontributor Dinamis di Seluruh UI
+    const legend1 = document.getElementById('legendNameM1');
+    const legend2 = document.getElementById('legendNameM2');
+    if (legend1) legend1.textContent = name1;
+    if (legend2) legend2.textContent = name2;
+
+    const cardName1 = document.getElementById('memberNameM1');
+    const cardName2 = document.getElementById('memberNameM2');
+    const avatar1 = document.getElementById('memberAvatarM1');
+    const avatar2 = document.getElementById('memberAvatarM2');
+    if (cardName1) cardName1.textContent = name1;
+    if (cardName2) cardName2.textContent = name2;
+    if (avatar1) avatar1.textContent = name1.charAt(0).toUpperCase();
+    if (avatar2) avatar2.textContent = name2.charAt(0).toUpperCase();
+
+    const radio1 = document.getElementById('radioNameM1');
+    const radio2 = document.getElementById('radioNameM2');
+    if (radio1) radio1.textContent = name1;
+    if (radio2) radio2.textContent = name2;
+
+    const filter1 = document.getElementById('filterTabM1');
+    const filter2 = document.getElementById('filterTabM2');
+    if (filter1) filter1.textContent = name1;
+    if (filter2) filter2.textContent = name2;
+
+    this.renderQuickChips();
+
+    // Tombol Sembunyikan Saldo
+    const hideBtn = document.getElementById('toggleHideBalanceBtn');
+    const hideBtnLabel = document.getElementById('hideBalanceBtnLabel');
+    const hideIcon = document.getElementById('hideBalanceIconContainer');
+    if (hideBtn && hideBtnLabel) {
+      hideBtn.classList.toggle('active-toggle', this.hideBalance);
+      hideBtnLabel.textContent = this.hideBalance ? 'Tampilkan' : 'Sembunyikan';
+    }
+    if (hideIcon) {
+      hideIcon.innerHTML = this.hideBalance
+        ? `<svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" y1="2" x2="22" y2="22"></line></svg>`
+        : `<svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    }
+
+    const titleEl = document.getElementById('goalTitleDisplay');
+    if (titleEl) titleEl.textContent = this.state.goal?.title || 'Target Tabungan Bersama';
+
+    const totalBalanceEl = document.getElementById('totalBalanceDisplay');
+    if (totalBalanceEl) {
+      totalBalanceEl.textContent = CurrencyUtils.formatRupiah(summary.totalBalance, this.hideBalance);
+    }
+
+    const targetDisplayEl = document.getElementById('targetAmountDisplay');
+    if (targetDisplayEl) {
+      targetDisplayEl.textContent =
+        summary.targetAmount > 0
+          ? CurrencyUtils.formatRupiah(summary.targetAmount, this.hideBalance)
+          : 'Rp 0';
+    }
+
+    const progressPctEl = document.getElementById('overallProgressPctDisplay');
+    if (progressPctEl) {
+      if (summary.targetAmount > 0) {
+        progressPctEl.innerHTML = `<span class="num-mono">${summary.overallProgressPct.toFixed(1)}%</span> Tercapai`;
+      } else {
+        progressPctEl.textContent = 'Target Fleksibel';
+      }
+    }
+
+    const m1Bar = document.getElementById('progressBarM1');
+    const m2Bar = document.getElementById('progressBarM2');
+    if (m1Bar) m1Bar.style.width = `${summary.m1BarWidth}%`;
+    if (m2Bar) m2Bar.style.width = `${summary.m2BarWidth}%`;
+
+    // Metrik 3 Kolom
+    const remainingEl = document.getElementById('remainingAmountDisplay');
+    if (remainingEl) {
+      remainingEl.innerHTML = `<span class="num-mono">${
+        summary.targetAmount > 0
+          ? CurrencyUtils.formatRupiah(summary.remainingAmount, this.hideBalance)
+          : 'Rp 0'
+      }</span>`;
+    }
+
+    const deadlineEl = document.getElementById('deadlineDisplay');
+    if (deadlineEl) {
+      deadlineEl.innerHTML = `${CurrencyUtils.formatDateID(this.state.goal?.targetDate)} (<span class="num-mono">${summary.daysRemaining}</span> hari)`;
+    }
+
+    const monthlyRecEl = document.getElementById('monthlyRecDisplay');
+    if (monthlyRecEl) {
+      if (summary.targetAmount > 0) {
+        monthlyRecEl.innerHTML = `<span class="num-mono">${CurrencyUtils.formatRupiah(
+          summary.recommendedMonthly,
+          this.hideBalance
+        )}</span>`;
+      } else {
+        monthlyRecEl.textContent = 'Sesuai selera';
+      }
+    }
+
+    // Banner Informasi Target
+    const bannerEl = document.getElementById('recommendationBanner');
+    const bannerTextEl = document.getElementById('recommendationBannerText');
+    if (bannerEl && bannerTextEl) {
+      if (summary.targetAmount === 0) {
+        bannerEl.classList.add('zero-target');
+        bannerTextEl.innerHTML =
+          'Target awal <span class="num-mono">Rp 0</span>. Ketuk <strong>Atur Target</strong> untuk menetapkan nominal sasaran &amp; nama kontributor.';
+      } else if (summary.remainingAmount === 0) {
+        bannerEl.classList.remove('zero-target');
+        bannerTextEl.innerHTML =
+          '<strong>Target Tercapai <span class="num-mono">100%</span>!</strong> Seluruh sasaran tabungan bersama telah terpenuhi dengan baik.';
+      } else {
+        bannerEl.classList.remove('zero-target');
+        const perPersonMonthly = Math.ceil(summary.recommendedMonthly / 2);
+        bannerTextEl.innerHTML = `Saran menabung bersama: <strong class="num-mono">${CurrencyUtils.formatRupiah(
+          summary.recommendedMonthly,
+          this.hideBalance
+        )}</strong>/bulan (<span class="num-mono">~${CurrencyUtils.formatRupiah(
+          perPersonMonthly,
+          this.hideBalance
+        )}</span>/orang) hingga <strong>${CurrencyUtils.formatDateID(this.state.goal?.targetDate)}</strong>.`;
+      }
+    }
+
+    // Rincian Kontribusi
+    const rulePillEl = document.getElementById('contributionRulePill');
+    if (rulePillEl) {
+      if (this.state.goal?.splitMode === 'custom') {
+        rulePillEl.innerHTML = `Porsi <span class="num-mono">${summary.m1Ratio}:${summary.m2Ratio}</span>`;
+      } else {
+        rulePillEl.textContent = 'Porsi Fleksibel';
+      }
+    }
+
+    document.getElementById('m1AmountDisplay').textContent = CurrencyUtils.formatRupiah(
+      summary.m1Net,
+      this.hideBalance
+    );
+    document.getElementById('m1ShareBadge').textContent = `${summary.m1SharePct.toFixed(1)}%`;
+
+    document.getElementById('m2AmountDisplay').textContent = CurrencyUtils.formatRupiah(
+      summary.m2Net,
+      this.hideBalance
+    );
+    document.getElementById('m2ShareBadge').textContent = `${summary.m2SharePct.toFixed(1)}%`;
+
+    const m1RuleBox = document.getElementById('m1RuleProgressBox');
+    const m2RuleBox = document.getElementById('m2RuleProgressBox');
+    if (this.state.goal?.splitMode === 'custom' && summary.targetAmount > 0) {
+      if (m1RuleBox) m1RuleBox.style.display = 'block';
+      if (m2RuleBox) m2RuleBox.style.display = 'block';
+
+      document.getElementById('m1TargetSubtext').innerHTML = `Target (<span class="num-mono">${summary.m1Ratio}%</span>): <span class="num-mono">${CurrencyUtils.formatRupiah(
+        summary.m1TargetAmount,
+        this.hideBalance
+      )}</span>`;
+      document.getElementById('m1MiniBar').style.width = `${summary.m1TargetProgressPct}%`;
+
+      document.getElementById('m2TargetSubtext').innerHTML = `Target (<span class="num-mono">${summary.m2Ratio}%</span>): <span class="num-mono">${CurrencyUtils.formatRupiah(
+        summary.m2TargetAmount,
+        this.hideBalance
+      )}</span>`;
+      document.getElementById('m2MiniBar').style.width = `${summary.m2TargetProgressPct}%`;
+    } else {
+      if (m1RuleBox) m1RuleBox.style.display = 'none';
+      if (m2RuleBox) m2RuleBox.style.display = 'none';
+    }
+
+    this.renderTransactionList();
+  },
+
+  renderTransactionList() {
+    const listContainer = document.getElementById('txListContainer');
+    const countBadge = document.getElementById('txCountLabel');
+    if (!listContainer) return;
+
+    const filtered = this.state.transactions.filter((tx) => {
+      if (this.activeFilter === 'all') return true;
+      const isM2 = tx.memberId === 'member2' || tx.memberId === 'm2' || tx.memberId === 'partner2';
+      return this.activeFilter === 'member2' ? isM2 : !isM2;
+    });
+
+    if (countBadge) {
+      countBadge.innerHTML = `<span class="num-mono">${filtered.length}</span> catatan`;
+    }
+
+    if (filtered.length === 0) {
+      listContainer.innerHTML = `
+        <div class="empty-state">
+          <p style="font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">Belum ada riwayat transaksi</p>
+          <p>Catat setoran atau penarikan pertama Anda menggunakan formulir di atas.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const name1 = this.getMemberName('member1');
+    const name2 = this.getMemberName('member2');
+
+    listContainer.innerHTML = filtered
+      .map((tx) => {
+        const isM2 = tx.memberId === 'member2' || tx.memberId === 'm2' || tx.memberId === 'partner2';
+        const rawMemberName = isM2 ? name2 : name1;
+        const safeMemberName = this.escapeHtml(rawMemberName);
+        const initial = this.escapeHtml(rawMemberName.charAt(0).toUpperCase() || '?');
+        const badgeClass = isM2 ? 'm2' : 'm1';
+        const isWithdrawal = tx.type === 'withdrawal';
+        const sign = isWithdrawal ? '-' : '+';
+        const amountClass = isWithdrawal ? 'withdrawal' : 'deposit';
+        const typeLabel = isWithdrawal ? 'Tarik' : 'Setor';
+        const safeNote = this.escapeHtml(tx.note || typeLabel);
+
+        return `
+          <div class="tx-item">
+            <div class="tx-left">
+              <div class="tx-badge ${badgeClass}">${initial}</div>
+              <div class="tx-info">
+                <div class="tx-title">${safeNote}</div>
+                <div class="tx-meta">${safeMemberName} • ${typeLabel} • ${CurrencyUtils.formatDateID(tx.date)}</div>
+              </div>
+            </div>
+            <div class="tx-right">
+              <div class="tx-amount ${amountClass}">
+                ${sign}${CurrencyUtils.formatRupiah(tx.amount, this.hideBalance)}
+              </div>
+              <button type="button" class="delete-tx-btn" data-delete-id="${this.escapeHtml(tx.id)}" title="Hapus transaksi" aria-label="Hapus transaksi">
+                <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+
+    listContainer.querySelectorAll('[data-delete-id]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-delete-id');
+        this.deleteTransaction(id);
+      });
+    });
+  },
+
+  escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  },
+
+  showToast(message) {
+    const toast = document.getElementById('toastNotification');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2600);
+  },
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  AppController.init();
+});
+  </script>
+</body>
+</html>

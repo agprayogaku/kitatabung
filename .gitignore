@@ -1,0 +1,20 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Log & file sementara
+*.log
+*.tmp
+*.bak
+
+# Cadangan data pribadi — jangan pernah di-commit
+*.json
+!package.json
+kitatabung_*.json
+
+# Environment
+.env
+.env.*
